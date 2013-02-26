@@ -9,7 +9,7 @@ from boto.s3.key import Key
 from fabric.api import abort
 from fabric.contrib.console import confirm
 
-bucket_name = 'www.ec2instances.info'
+bucket_name = os.environ.get('AWS_S3_BUCKET', 'heroku.ec2instances.info')
 
 def create_bucket():
     conn = connect_s3()
@@ -19,7 +19,6 @@ def create_bucket():
 def deploy(root_dir='www'):
     conn = connect_s3()
     bucket = conn.get_bucket(bucket_name)
-
     for root, dirs, files in os.walk(root_dir):
         for name in files:
             if name.startswith('.'):
